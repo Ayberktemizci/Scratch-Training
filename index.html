@@ -648,6 +648,46 @@ function showScreen(id){
   document.getElementById(id).classList.add('active');
 }
 
+// ─── DEV MODE (Shift+D three times) ──────────────────────────────────────
+let devKeySeq = [];
+let devMode = false;
+document.addEventListener('keydown', function(e){
+  if(e.key === 'D' && e.shiftKey){
+    devKeySeq.push(Date.now());
+    if(devKeySeq.length > 3) devKeySeq.shift();
+    if(devKeySeq.length === 3 && (devKeySeq[2] - devKeySeq[0]) < 2000){
+      devKeySeq = [];
+      devMode = !devMode;
+      if(devMode){
+        MODS.forEach(m => {
+          localStorage.setItem('scratch-passed-'+m.id,'1');
+          localStorage.setItem('scratch-score-'+m.id,'100');
+        });
+        showDevToast('🛠️ Dev Mode ON — all modules unlocked');
+      } else {
+        MODS.forEach(m => {
+          localStorage.removeItem('scratch-passed-'+m.id);
+          localStorage.removeItem('scratch-score-'+m.id);
+        });
+        showDevToast('🔒 Dev Mode OFF — progress cleared');
+      }
+      renderHome();
+    }
+  } else {
+    devKeySeq = [];
+  }
+});
+function showDevToast(msg){
+  const ex = document.getElementById('dev-toast');
+  if(ex) ex.remove();
+  const t = document.createElement('div');
+  t.id = 'dev-toast';
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#111;color:#C4F046;font-family:Nunito,sans-serif;font-weight:900;font-size:14px;padding:12px 24px;border-radius:999px;z-index:9999;border:2px solid #AEDD2E;box-shadow:0 4px 20px rgba(0,0,0,.4);pointer-events:none;white-space:nowrap;';
+  document.body.appendChild(t);
+  setTimeout(()=>{ t.style.transition='opacity .4s'; t.style.opacity='0'; setTimeout(()=>t.remove(),400); }, 2500);
+}
+
 // ─── INIT ────────────────────────────────────────────────────────────────
 renderHome();
 showScreen('screen-home');
