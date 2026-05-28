@@ -171,6 +171,35 @@ body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans
 .bline{display:block;width:100%;padding:13px 24px;margin-bottom:10px;background:transparent;color:var(--text2);border:2px solid var(--border);border-radius:var(--rpill);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s}
 .bline:hover{background:var(--surface2);color:var(--text);border-color:var(--lime-d)}
 @media(max-width:640px){.cbody,.msec,.hero{padding-left:18px;padding-right:18px}}
+/* SKIP */
+.skip-row{text-align:center;padding:0 32px 48px}
+.skip-btn{background:none;border:none;color:var(--text-muted);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px;transition:color .15s}
+.skip-btn:hover{color:var(--text2)}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:var(--surface);border:2px solid var(--border);border-radius:20px;padding:32px 28px;max-width:440px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal h3{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:var(--text);margin-bottom:10px}
+.modal p{font-size:14px;color:var(--text2);line-height:1.65;margin-bottom:24px}
+.modal-btns{display:flex;gap:10px}
+.modal-yes{flex:1;padding:13px;background:var(--pink);color:#fff;border:none;border-radius:var(--rpill);font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;cursor:pointer;transition:all .15s}
+.modal-yes:hover{background:var(--pink-d)}
+.modal-no{flex:1;padding:13px;background:var(--surface2);color:var(--text2);border:2px solid var(--border);border-radius:var(--rpill);font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .15s}
+.modal-no:hover{background:var(--border);color:var(--text)}
+/* DST screen */
+.dst-body{padding:40px 40px 60px;max-width:780px;margin:0 auto;flex:1}
+.dst-badge{display:inline-flex;align-items:center;gap:6px;background:var(--lime);color:var(--ink);border:2px solid var(--lime-d);border-radius:var(--rpill);padding:5px 14px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px}
+[data-theme="dark"] .dst-badge{background:rgba(196,240,70,.18);color:var(--lime);border-color:rgba(196,240,70,.4)}
+.dst-h1{font-family:'Nunito',sans-serif;font-size:clamp(22px,4vw,32px);font-weight:900;letter-spacing:-.6px;line-height:1.12;color:var(--text);margin-bottom:10px}
+.dst-sub{font-size:15px;color:var(--text2);line-height:1.7;margin-bottom:28px}
+.dst-link-btn{display:inline-flex;align-items:center;gap:7px;margin-top:12px;padding:10px 18px;background:var(--ink);color:#fff;border:none;border-radius:var(--rpill);font-family:'Nunito',sans-serif;font-size:14px;font-weight:900;cursor:pointer;text-decoration:none;transition:all .15s}
+.dst-link-btn:hover{background:var(--pink);transform:translateY(-1px)}
+[data-theme="dark"] .dst-link-btn{background:var(--lime);color:var(--ink)}
+[data-theme="dark"] .dst-link-btn:hover{background:var(--pink);color:#fff}
+.dst-warn{background:var(--cw-bg);border:2px solid var(--cw-b);border-radius:var(--rsm);padding:12px 16px;color:var(--cw-t);font-size:13.5px;line-height:1.6;margin-bottom:24px;display:flex;gap:10px}
+.dst-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--r);padding:24px 24px;box-shadow:var(--shadow);margin-bottom:20px}
+.dst-card-title{font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;color:var(--text);margin-bottom:10px}
+@media(max-width:640px){.dst-body{padding-left:18px;padding-right:18px}}
 </style>
 </head>
 <body>
@@ -202,6 +231,22 @@ body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans
   <div class="msec">
     <div class="slbl">Twoje moduły</div>
     <div class="grid" id="mgrid"></div>
+  </div>
+  <div class="skip-row">
+    <button class="skip-btn" onclick="document.getElementById('skip-modal').classList.add('show')">Pomiń szkolenie i przejdź do DST →</button>
+  </div>
+</div>
+
+<!-- SKIP MODAL -->
+<div class="modal-overlay" id="skip-modal">
+  <div class="modal">
+    <div style="font-size:40px;margin-bottom:12px">⚡</div>
+    <h3>Pominąć szkolenie?</h3>
+    <p>Czy na pewno chcesz pominąć materiały szkoleniowe i przejść bezpośrednio do Digital Skill Test?</p>
+    <div class="modal-btns">
+      <button class="modal-no" onclick="document.getElementById('skip-modal').classList.remove('show')">Nie, uczę się dalej</button>
+      <button class="modal-yes" onclick="document.getElementById('skip-modal').classList.remove('show');skipToLastModule()">Tak, odblokuj Moduł 9</button>
+    </div>
   </div>
 </div>
 
@@ -259,6 +304,7 @@ body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans
   </nav>
   <div class="rbody" id="rbody"></div>
 </div>
+
 
 <script>
 // ─── THEME ────────────────────────────────────────────────────────────────
@@ -553,7 +599,7 @@ function renderHome(){
   grid.innerHTML = '';
   MODS.forEach((m,i)=>{
     const done = isPassed(m.id);
-    const locked = i>0 && !isPassed(MODS[i-1].id);
+    const locked = i>0 && !isPassed(MODS[i-1].id) && !isPassed(m.id);
     const div = document.createElement('div');
     div.className = 'mc'+(done?' done':'')+(locked?' locked':'');
     div.onclick = locked ? null : ()=>openModule(m);
@@ -680,6 +726,12 @@ function showResults(pct, passed){
 // ─── NAVIGATION ──────────────────────────────────────────────────────────
 function exitQuiz(){ if(currentModule) openModule(currentModule); }
 function goHome(){ renderHome(); showScreen('screen-home'); window.scrollTo(0,0); }
+function skipToLastModule(){
+  const lastMod = MODS[MODS.length - 1];
+  localStorage.setItem('scratch-pl-passed-'+lastMod.id,'1');
+  localStorage.setItem('scratch-pl-score-'+lastMod.id,'100');
+  goHome();
+}
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
