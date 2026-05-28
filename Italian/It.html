@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scratch Tutor Training — Kodland (IT)</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --lime:#C4F046;--lime-d:#AEDD2E;--pink:#F03D9E;--pink-d:#D4308A;
+  --ink:#111111;--ink2:#3A3A3A;--muted:#7A7A8A;
+  --bg:#E8FABD;--surface:#FFFFFF;--surface2:#F4FCD3;--border:#D8F07A;
+  --text:var(--ink);--text2:var(--ink2);--text-muted:var(--muted);
+  --nav-bg:rgba(255,255,255,0.94);--nav-b:#DDFAA0;
+  --shadow:0 2px 12px rgba(0,0,0,.07);--shadow-h:0 8px 28px rgba(0,0,0,.13);
+  --code-bg:#111820;--code-text:#C9E4FF;
+  --cw-bg:#FFF7F0;--cw-b:#FED7AA;--cw-t:#9A3412;
+  --ct-bg:#F0F9FF;--ct-b:#BAE6FD;--ct-t:#0C4A6E;
+  --cg-bg:#F0FDF4;--cg-b:#BBF7D0;--cg-t:#14532D;
+  --hi-bg:#FFF0F8;--hi-b:#F9A8D4;--hi-t:#831843;
+  --opt-h:#F4FCD3;
+  --ok-bg:#F0FDF4;--ok-b:#86EFAC;--ok-t:#15803D;
+  --no-bg:#FEF2F2;--no-b:#FECACA;--no-t:#B91C1C;
+  --r:14px;--rsm:8px;--rpill:999px;
+}
+[data-theme="dark"]{
+  --bg:#0E1210;--surface:#181F15;--surface2:#1E2A18;--border:#2A3D22;
+  --text:#F0FAD8;--text2:#B8D89A;--text-muted:#6B8A5A;
+  --nav-bg:rgba(14,18,16,0.94);--nav-b:#2A3D22;
+  --shadow:0 2px 16px rgba(0,0,0,.5);--shadow-h:0 8px 28px rgba(0,0,0,.5);
+  --cw-bg:rgba(249,115,22,.1);--cw-b:rgba(249,115,22,.3);--cw-t:#FB923C;
+  --ct-bg:rgba(14,165,233,.1);--ct-b:rgba(14,165,233,.3);--ct-t:#38BDF8;
+  --cg-bg:rgba(34,197,94,.1);--cg-b:rgba(34,197,94,.3);--cg-t:#4ADE80;
+  --hi-bg:rgba(240,61,158,.08);--hi-b:rgba(240,61,158,.3);--hi-t:#F472B6;
+  --opt-h:#1E2A18;
+  --ok-bg:rgba(34,197,94,.1);--ok-b:rgba(34,197,94,.4);--ok-t:#4ADE80;
+  --no-bg:rgba(239,68,68,.1);--no-b:rgba(239,68,68,.4);--no-t:#F87171;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;overflow-x:hidden;transition:background .25s,color .25s}
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.active{display:flex}
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:62px;background:var(--nav-bg);backdrop-filter:blur(14px);border-bottom:2px solid var(--nav-b);position:sticky;top:0;z-index:100;transition:background .25s,border-color .25s}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0}
+.logo-mark{font-family:'Nunito',sans-serif;font-weight:900;font-size:20px;letter-spacing:-.5px;color:var(--ink);line-height:1;white-space:nowrap}
+[data-theme="dark"] .logo-mark{color:var(--lime)}
+.logo-sub{font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;color:var(--pink);white-space:nowrap;line-height:1}
+.logo-div{width:1px;height:16px;background:var(--border);margin:0 4px}
+.nav-r{display:flex;align-items:center;gap:8px}
+.tbtn{width:38px;height:38px;border-radius:var(--rpill);background:var(--surface);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:all .15s;flex-shrink:0}
+.tbtn:hover{background:var(--lime);border-color:var(--lime-d)}
+.pbtn{display:flex;align-items:center;gap:5px;padding:8px 16px;border-radius:var(--rpill);background:var(--surface);border:2px solid var(--border);color:var(--text2);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
+.pbtn:hover{background:var(--lime);border-color:var(--lime-d);color:var(--ink)}
+/* HERO */
+.hero{padding:52px 40px 36px;text-align:center;position:relative}
+.hero::before{content:'';position:absolute;inset:0;bottom:30%;background:radial-gradient(ellipse 70% 55% at 50% 0%,var(--lime) 0%,transparent 70%);opacity:.45;pointer-events:none}
+[data-theme="dark"] .hero::before{background:radial-gradient(ellipse 70% 55% at 50% 0%,rgba(196,240,70,.15) 0%,transparent 70%);opacity:1}
+.hero-inner{position:relative;max-width:600px;margin:0 auto}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:2px solid var(--border);border-radius:var(--rpill);padding:5px 14px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:900;color:var(--text2);margin-bottom:20px;text-transform:uppercase;letter-spacing:.5px}
+.hero h1{font-family:'Nunito',sans-serif;font-size:clamp(28px,5vw,46px);font-weight:900;line-height:1.1;letter-spacing:-1px;color:var(--text);margin-bottom:14px}
+.h-pill{display:inline-block;background:var(--pink);color:#fff;border-radius:var(--rpill);padding:1px 18px;margin:0 2px;font-size:.93em}
+[data-theme="dark"] .h-pill{background:var(--lime);color:var(--ink)}
+.hero p{color:var(--text2);font-size:15px;line-height:1.65;margin-bottom:28px}
+.prog-strip{display:inline-flex;align-items:center;gap:14px;background:var(--surface);border:2px solid var(--border);border-radius:var(--rpill);padding:10px 20px;box-shadow:var(--shadow);max-width:360px;width:100%}
+.pnum{font-family:'Nunito',sans-serif;font-weight:900;font-size:22px;color:var(--text);line-height:1;flex-shrink:0}
+.ptrack{flex:1;height:8px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rpill);overflow:hidden}
+.pfill{height:100%;background:linear-gradient(90deg,var(--lime),var(--pink));border-radius:var(--rpill);transition:width .6s cubic-bezier(.34,1.56,.64,1)}
+.plbl{font-size:12px;color:var(--text-muted);font-weight:600;flex-shrink:0}
+/* GRID */
+.msec{padding:8px 32px 70px;max-width:1060px;margin:0 auto;width:100%}
+.slbl{font-family:'Nunito',sans-serif;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:16px;margin-top:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.mc{background:var(--surface);border:2px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s,border-color .2s;box-shadow:var(--shadow)}
+.mc:hover:not(.locked){transform:translateY(-4px);box-shadow:var(--shadow-h)}
+.mc.locked{opacity:.45;cursor:not-allowed}
+.mc.done{border-color:var(--lime-d)}
+[data-theme="dark"] .mc.done{border-color:rgba(196,240,70,.4)}
+.mc-stripe{height:6px}
+.mc-body{padding:20px}
+.mc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.mc-num{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text-muted)}
+.mc-em{font-size:22px}
+.mc-title{font-family:'Nunito',sans-serif;font-size:17px;font-weight:900;letter-spacing:-.2px;color:var(--text);margin-bottom:5px}
+.mc-desc{font-size:13px;color:var(--text2);line-height:1.55}
+.mc-foot{margin-top:15px;display:flex;align-items:center;justify-content:space-between}
+.badge{font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;letter-spacing:.3px;padding:4px 12px;border-radius:var(--rpill);text-transform:uppercase}
+.bd{background:var(--lime);color:var(--ink);border:1.5px solid var(--lime-d)}
+.bs{background:var(--pink);color:#fff;border:1.5px solid var(--pink-d)}
+.bl{background:var(--surface2);color:var(--text-muted);border:1.5px solid var(--border)}
+.btr{background:#FFF7E6;color:#B45309;border:1.5px solid #FDE68A}
+[data-theme="dark"] .bd{background:rgba(196,240,70,.18);color:var(--lime);border-color:rgba(196,240,70,.4)}
+[data-theme="dark"] .bs{background:rgba(240,61,158,.18);color:var(--pink);border-color:rgba(240,61,158,.4)}
+[data-theme="dark"] .btr{background:rgba(245,158,11,.1);color:#FBB040;border-color:rgba(245,158,11,.3)}
+.stag{font-size:12px;color:var(--text-muted);font-weight:600}
+.stag b{color:var(--text)}
+/* CONTENT */
+.cbody{padding:36px 40px 60px;max-width:800px;margin:0 auto;width:100%;flex:1}
+.meyebrow{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:8px}
+.mh1{font-family:'Nunito',sans-serif;font-size:clamp(24px,4vw,34px);font-weight:900;letter-spacing:-.6px;line-height:1.12;color:var(--text);margin-bottom:14px}
+.mobj{background:var(--surface);border:2px solid var(--border);border-left:5px solid var(--acc,var(--lime));border-radius:0 var(--rsm) var(--rsm) 0;padding:12px 16px;font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:32px}
+.mobj strong{color:var(--text)}
+.sch{font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;margin:28px 0 12px;color:var(--text);display:flex;align-items:center;gap:8px}
+.sch::after{content:'';flex:1;height:2px;background:var(--border);border-radius:2px}
+.card{background:var(--surface);border:2px solid var(--border);border-radius:var(--r);padding:18px 20px;margin-bottom:10px;box-shadow:var(--shadow)}
+.card h4{font-family:'Nunito',sans-serif;font-size:14px;font-weight:900;color:var(--text);margin-bottom:7px}
+.card p,.card li{font-size:14px;color:var(--text2);line-height:1.7}
+.card ul{padding-left:17px}
+.card li{margin-bottom:4px}
+.card p strong,.card li strong{color:var(--text)}
+.card.hi{background:var(--hi-bg);border-color:var(--hi-b)}
+.card.hi h4{color:var(--hi-t)}
+.card.hi p,.card.hi li{color:var(--hi-t);opacity:.88}
+.callout{display:flex;gap:10px;border-radius:var(--rsm);padding:12px 15px;margin-bottom:10px;font-size:13.5px;line-height:1.65;border:1.5px solid}
+.ci{font-size:15px;flex-shrink:0;margin-top:1px}
+.cw{background:var(--cw-bg);border-color:var(--cw-b);color:var(--cw-t)}
+.ct{background:var(--ct-bg);border-color:var(--ct-b);color:var(--ct-t)}
+.cg{background:var(--cg-bg);border-color:var(--cg-b);color:var(--cg-t)}
+.divider{border:none;border-top:2px solid var(--border);margin:28px 0}
+.ctabtn{display:block;width:100%;padding:16px;background:var(--ink);color:#fff;border:none;border-radius:var(--rpill);font-family:'Nunito',sans-serif;font-size:17px;font-weight:900;cursor:pointer;transition:all .15s;margin-bottom:40px;margin-top:4px;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.ctabtn:hover{background:var(--pink);transform:translateY(-2px);box-shadow:0 6px 20px rgba(240,61,158,.35)}
+[data-theme="dark"] .ctabtn{background:var(--lime);color:var(--ink)}
+[data-theme="dark"] .ctabtn:hover{background:var(--pink);color:#fff}
+/* VIDEO */
+.video-wrap{border-radius:var(--r);overflow:hidden;margin-bottom:16px;background:#000;border:2px solid var(--border);box-shadow:var(--shadow)}
+.video-wrap video{display:block;width:100%;max-height:480px;background:#000}
+.video-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);padding:8px 12px;background:var(--surface2);border-top:1.5px solid var(--border)}
+/* QUIZ */
+.qbody{padding:36px 40px;max-width:680px;margin:0 auto;width:100%;flex:1}
+.qpt{height:7px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rpill);margin-bottom:36px;overflow:hidden}
+.qpf{height:100%;background:linear-gradient(90deg,var(--lime),var(--pink));border-radius:var(--rpill);transition:width .4s ease}
+.qctr{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:10px}
+.qtxt{font-family:'Nunito',sans-serif;font-size:21px;font-weight:900;letter-spacing:-.3px;line-height:1.35;margin-bottom:26px;color:var(--text)}
+.qopts{display:flex;flex-direction:column;gap:10px}
+.qopt{background:var(--surface);border:2px solid var(--border);border-radius:var(--r);padding:14px 18px;cursor:pointer;font-size:14px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;transition:all .15s;text-align:left;line-height:1.5;box-shadow:var(--shadow)}
+.qopt:hover:not(.answered){background:var(--opt-h);border-color:var(--lime-d)}
+.qopt.correct{background:var(--ok-bg);border-color:var(--ok-b);color:var(--ok-t)}
+.qopt.wrong{background:var(--no-bg);border-color:var(--no-b);color:var(--no-t)}
+.qopt.answered{cursor:default}
+.qfb{display:none;margin-top:14px;border-radius:var(--rsm);padding:13px 16px;font-size:14px;line-height:1.6;border:2px solid}
+.qfb.show{display:block}
+.qfb.ok{background:var(--ok-bg);border-color:var(--ok-b);color:var(--ok-t)}
+.qfb.bad{background:var(--no-bg);border-color:var(--no-b);color:var(--no-t)}
+.qnxt{display:none;margin-top:18px;width:100%;padding:14px;background:var(--ink);color:#fff;border:none;border-radius:var(--rpill);font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;cursor:pointer;transition:all .15s}
+.qnxt.show{display:block}
+.qnxt:hover{background:var(--lime);color:var(--ink)}
+[data-theme="dark"] .qnxt{background:var(--lime);color:var(--ink)}
+[data-theme="dark"] .qnxt:hover{background:var(--pink);color:#fff}
+/* RESULTS */
+.rbody{padding:60px 40px;max-width:520px;margin:0 auto;text-align:center;flex:1}
+.remi{font-size:64px;margin-bottom:14px}
+.rtitle{font-family:'Nunito',sans-serif;font-size:30px;font-weight:900;letter-spacing:-.4px;color:var(--text)}
+.rpct{font-family:'Nunito',sans-serif;font-size:62px;font-weight:900;line-height:1;margin:14px 0 6px}
+.rpct.pass{color:var(--lime-d)}
+.rpct.fail{color:var(--pink)}
+[data-theme="dark"] .rpct.pass{color:var(--lime)}
+.rsub{color:var(--text2);font-size:15px;line-height:1.65;margin-bottom:30px}
+.bdark{display:block;width:100%;padding:14px 24px;margin-bottom:10px;background:var(--ink);color:#fff;border:none;border-radius:var(--rpill);font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;cursor:pointer;transition:all .15s}
+.bdark:hover{background:var(--pink)}
+[data-theme="dark"] .bdark{background:var(--lime);color:var(--ink)}
+[data-theme="dark"] .bdark:hover{background:var(--pink);color:#fff}
+.bline{display:block;width:100%;padding:13px 24px;margin-bottom:10px;background:transparent;color:var(--text2);border:2px solid var(--border);border-radius:var(--rpill);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s}
+.bline:hover{background:var(--surface2);color:var(--text);border-color:var(--lime-d)}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:var(--surface);border:2px solid var(--border);border-radius:20px;padding:32px 28px;max-width:440px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal h3{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:var(--text);margin-bottom:10px}
+.modal p{font-size:14px;color:var(--text2);line-height:1.65;margin-bottom:24px}
+.modal-btns{display:flex;gap:10px}
+.modal-yes{flex:1;padding:13px;background:var(--pink);color:#fff;border:none;border-radius:var(--rpill);font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;cursor:pointer;transition:all .15s}
+.modal-yes:hover{background:var(--pink-d)}
+.modal-no{flex:1;padding:13px;background:var(--surface2);color:var(--text2);border:2px solid var(--border);border-radius:var(--rpill);font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .15s}
+.modal-no:hover{background:var(--border);color:var(--text)}
+/* UPLOAD PROMPT */
+.upload-note{background:var(--ct-bg);border:1.5px dashed var(--ct-b);border-radius:var(--rsm);padding:12px 16px;margin-bottom:10px;font-size:13px;color:var(--ct-t);line-height:1.6;display:flex;gap:10px;align-items:flex-start}
+@media(max-width:640px){.cbody,.msec,.hero{padding-left:18px;padding-right:18px}}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="screen-home" class="screen active">
+  <nav class="nav">
+    <a class="logo" href="#" onclick="goHome()">
+      <span class="logo-mark">kodland</span>
+      <span class="logo-div"></span>
+      <span class="logo-sub">Formazione Scratch</span>
+    </a>
+    <div class="nav-r">
+      <button class="tbtn" id="tb0" onclick="toggleTheme()"></button>
+    </div>
+  </nav>
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">🐱 Programma di Formazione Tutor</div>
+      <h1>Preparati a insegnare<br><span class="h-pill">Scratch</span><br>ai bambini</h1>
+      <p>Completa tutti i moduli e supera ogni quiz per completare la tua preparazione come tutor. Ottieni il 70%+ per sbloccare il modulo successivo.</p>
+      <div class="prog-strip">
+        <div class="pnum" id="pnum">0/8</div>
+        <div class="ptrack"><div class="pfill" id="pfill" style="width:0%"></div></div>
+        <div class="plbl">moduli completati</div>
+      </div>
+    </div>
+  </div>
+  <div class="msec">
+    <div class="slbl">I tuoi moduli</div>
+    <div class="grid" id="mgrid"></div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div id="screen-content" class="screen">
+  <nav class="nav">
+    <a class="logo" href="#" onclick="goHome()">
+      <span class="logo-mark">kodland</span>
+      <span class="logo-div"></span>
+      <span class="logo-sub">Formazione Scratch</span>
+    </a>
+    <div class="nav-r">
+      <button class="pbtn" onclick="goHome()">← Moduli</button>
+      <button class="tbtn" onclick="toggleTheme()"></button>
+    </div>
+  </nav>
+  <div class="cbody" id="cbody"></div>
+</div>
+
+<!-- QUIZ -->
+<div id="screen-quiz" class="screen">
+  <nav class="nav">
+    <a class="logo" href="#" onclick="goHome()">
+      <span class="logo-mark">kodland</span>
+      <span class="logo-div"></span>
+      <span class="logo-sub">Formazione Scratch</span>
+    </a>
+    <div class="nav-r">
+      <button class="pbtn" onclick="exitQuiz()">← Esci dal Quiz</button>
+      <button class="tbtn" onclick="toggleTheme()"></button>
+    </div>
+  </nav>
+  <div class="qbody">
+    <div class="qpt"><div class="qpf" id="qfill"></div></div>
+    <div class="qctr" id="qcount"></div>
+    <div class="qtxt" id="qtext"></div>
+    <div class="qopts" id="qopts"></div>
+    <div class="qfb" id="qfb"></div>
+    <button class="qnxt" id="qnxt" onclick="nextQ()">Avanti →</button>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="screen-results" class="screen">
+  <nav class="nav">
+    <a class="logo" href="#" onclick="goHome()">
+      <span class="logo-mark">kodland</span>
+      <span class="logo-div"></span>
+      <span class="logo-sub">Formazione Scratch</span>
+    </a>
+    <div class="nav-r">
+      <button class="pbtn" onclick="goHome()">← Moduli</button>
+      <button class="tbtn" onclick="toggleTheme()"></button>
+    </div>
+  </nav>
+  <div class="rbody" id="rbody"></div>
+</div>
+
+<script>
+// ─── THEME ────────────────────────────────────────────────────────────────
+(function(){
+  const s=localStorage.getItem('kl-theme');
+  const sys=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  const th=s||sys;
+  if(th==='dark') document.documentElement.setAttribute('data-theme','dark');
+  setIcons(th);
+})();
+function setIcons(t){ document.querySelectorAll('.tbtn').forEach(b=>b.textContent=t==='dark'?'☀️':'🌙'); }
+function toggleTheme(){
+  const d=document.documentElement.getAttribute('data-theme')==='dark';
+  const n=d?'light':'dark';
+  n==='dark'?document.documentElement.setAttribute('data-theme','dark'):document.documentElement.removeAttribute('data-theme');
+  localStorage.setItem('kl-theme',n); setIcons(n);
+}
+
+// ─── PROGRESS ─────────────────────────────────────────────────────────────
+function getScore(id){ return parseInt(localStorage.getItem('scratch-score-'+id)||'0'); }
+function isPassed(id){ return localStorage.getItem('scratch-passed-'+id)==='1'; }
+function setResult(id,pct,passed){
+  localStorage.setItem('scratch-score-'+id,pct);
+  if(passed) localStorage.setItem('scratch-passed-'+id,'1');
+}
+
+// ─── MODULE DATA ──────────────────────────────────────────────────────────
+const MODS = [
+  {
+    id:1, emoji:'👋', color:'#4C97FF',
+    title:'Benvenuto/a alla formazione su Scratch!',
+    desc:'Scopri lo scopo di questa University e cosa imparerai per diventare un ottimo tutor Scratch.',
+    obj:'Comprendere lo scopo della formazione e sentirti pronto/a a iniziare il percorso.',
+    sections:[
+      {t:'🎉 Introduzione', cards:[
+        {type:'text',h:'Ciao! Benvenuto/a alla formazione su Scratch per Tutor!',b:'Lo scopo di questa University è farti acquisire gli strumenti e le competenze tecniche necessarie per sentirti a tuo agio con Scratch. Così potrai tenere delle ottime lezioni per te e i tuoi studenti, concentrandoti sulla tua classe, con la sicurezza di conoscere bene la materia.'},
+        {type:'video',n:1,label:'Introduzione alla formazione'},
+      ]},
+    ],
+    quiz:[
+      {q:'Qual è lo scopo principale di questa formazione per tutor?',opts:['Imparare a programmare videogiochi professionali','Acquisire strumenti e competenze per sentirti a tuo agio con Scratch','Ottenere una certificazione internazionale','Creare un portfolio personale'],c:1,fb:'La formazione serve per acquisire strumenti e competenze tecniche per insegnare Scratch con sicurezza.'},
+      {q:'Chi è il pubblico principale delle lezioni che terrai?',opts:['Sviluppatori senior','Adulti appassionati di tecnologia','Studenti, principalmente bambini','Colleghi tutor'],c:2,fb:'Il tutor si concentra sulla propria classe di studenti, principalmente bambini.'},
+      {q:'Cosa ti permette di fare la conoscenza solida di Scratch come tutor?',opts:['Guadagnare di più','Concentrarti sulla tua classe con sicurezza','Creare app mobile','Insegnare Python avanzato'],c:1,fb:'Conoscere bene la materia ti permette di concentrarti sulla classe senza preoccuparti della tecnologia.'},
+    ]
+  },
+  {
+    id:2, emoji:'🐱', color:'#9966FF',
+    title:'Cosa è Scratch',
+    desc:'Scopri cos\'è Scratch, perché è usato in ambito didattico e come rende l\'apprendimento della programmazione divertente.',
+    obj:'Comprendere cosa è Scratch e perché è uno strumento ideale per insegnare la programmazione ai bambini.',
+    sections:[
+      {t:'🧩 Cos\'è Scratch?', cards:[
+        {type:'text',h:'Un linguaggio di programmazione a blocchi',b:'Scratch è un linguaggio di programmazione a blocchi, molto usato in ambito didattico perché accessibile e adatto ai bambini. Grazie a Scratch è possibile imparare a programmare in modo colorato e divertente!'},
+        {type:'video',n:2,label:'Presentazione di Scratch'},
+        {type:'tip',txt:'Scratch è sviluppato dal MIT Media Lab ed è gratuito. È usato da milioni di bambini in tutto il mondo per creare storie animate, giochi e programmi interattivi.'},
+      ]},
+    ],
+    quiz:[
+      {q:'Cosa è Scratch?',opts:['Un sistema operativo per bambini','Un linguaggio di programmazione a blocchi','Un\'app per disegnare','Un gioco di ruolo online'],c:1,fb:'Scratch è un linguaggio di programmazione a blocchi, progettato per essere accessibile ai bambini.'},
+      {q:'Perché Scratch è considerato adatto ai bambini?',opts:['Perché è a pagamento','Perché usa solo numeri','Perché è accessibile, colorato e divertente','Perché richiede un computer potente'],c:2,fb:'Scratch è accessibile, colorato e divertente, caratteristiche che lo rendono ideale per i bambini.'},
+      {q:'Chi ha sviluppato Scratch?',opts:['Google','Apple','MIT Media Lab','Microsoft'],c:2,fb:'Scratch è sviluppato dal MIT Media Lab ed è disponibile gratuitamente per tutti.'},
+    ]
+  },
+  {
+    id:3, emoji:'🌐', color:'#FF8C1A',
+    title:'Panoramica del sito di Scratch',
+    desc:'Esplora le sezioni principali del sito Scratch, la community, i tutorial e l\'importanza di avere un account personale.',
+    obj:'Navigare con sicurezza nel sito di Scratch e capire l\'importanza di un account personale.',
+    sections:[
+      {t:'🗂️ Le sezioni del sito', cards:[
+        {type:'text',h:'Esploriamo Scratch insieme',b:'Vediamo le sezioni principali del sito di Scratch, e come imparare e trovare ispirazione, grazie ai progetti condivisi dalla community e ai tutorial ufficiali.'},
+        {type:'video',n:3,label:'Panoramica del sito di Scratch'},
+      ]},
+      {t:'👤 Perché creare un account', cards:[
+        {type:'text',h:'L\'importanza dell\'account personale',b:'Approfondiamo anche il motivo per cui è importante creare un account personale su Scratch.'},
+        {type:'video',n:4,label:'Account personale su Scratch'},
+        {type:'tip',txt:'Con un account puoi salvare i tuoi progetti, condividerli con la community e tenere traccia dei tuoi progressi.'},
+      ]},
+    ],
+    quiz:[
+      {q:'Dove si possono trovare progetti di ispirazione su Scratch?',opts:['Solo sul canale YouTube di Scratch','Nella sezione community del sito Scratch','Su un app store','Nella sezione download'],c:1,fb:'La community di Scratch condivide progetti che possono servire da ispirazione e apprendimento.'},
+      {q:'Perché è importante avere un account personale su Scratch?',opts:['Per accedere a funzioni premium a pagamento','Per salvare, condividere progetti e seguire i progressi','Per scaricare Scratch sul computer','Per usare la webcam'],c:1,fb:'Un account personale permette di salvare e condividere progetti e tenere traccia dei progressi.'},
+      {q:'Cosa offre il sito di Scratch per imparare?',opts:['Solo video su YouTube','Tutorial ufficiali e progetti della community','Corsi a pagamento','Solo libri digitali'],c:1,fb:'Il sito di Scratch offre tutorial ufficiali e la possibilità di esplorare progetti condivisi dalla community.'},
+    ]
+  },
+  {
+    id:4, emoji:'🧱', color:'#FF6680',
+    title:'Blocchi e come usarli',
+    desc:'Esplora tutti i tipi di blocchi in Scratch: movimento, aspetto, suoni, eventi, controllo, sensori, operatori, variabili e i blocchi personalizzati.',
+    obj:'Conoscere e saper usare tutti i tipi di blocchi disponibili in Scratch.',
+    sections:[
+      {t:'🏃 Blocchi Movimento', cards:[
+        {type:'text',h:'Muovere gli sprite',b:'I blocchi di movimento servono per muovere gli sprite (i personaggi) all\'interno dello stage. Con questi blocchi puoi spostare, ruotare e posizionare gli sprite in modo preciso.'},
+        {type:'video',n:5,label:'Blocchi Movimento'},
+      ]},
+      {t:'🎨 Blocchi Aspetto', cards:[
+        {type:'text',h:'Grafica ed animazioni',b:'I blocchi aspetto servono a ciò che riguarda la grafica, come gli effetti e la gestione delle animazioni, e per aggiungere dialoghi con dei balloon.'},
+        {type:'video',n:6,label:'Blocchi Aspetto'},
+      ]},
+      {t:'🎶 Blocchi Suoni', cards:[
+        {type:'text',h:'Aggiungi voce e musica al tuo progetto',b:'In questo video imparerai a conoscere i componenti audio che ti consentono di aggiungere effetti, registrazioni e musica ai tuoi progetti. Imparerai a riprodurre i suoni, a modificarne il tempo e il volume e a creare le tue registrazioni. Il suono è un elemento chiave che rende i giochi e le animazioni più coinvolgenti ed emozionanti 🎶'},
+        {type:'tip',txt:'Puoi riprodurre suoni predefiniti, registrare la tua voce 🎤, modificare il volume e la velocità, fermare i suoni e controllarne l\'ordine.'},
+        {type:'video',n:7,label:'Blocchi Suoni'},
+      ]},
+      {t:'🚦 Blocchi Evento', cards:[
+        {type:'text',h:'Come inizia tutto?',b:'I blocchi evento attivano le azioni nel tuo progetto. Sono ciò che fa sì che accada qualcosa quando clicchi, premi un tasto o ricevi un segnale. Senza blocchi di eventi, il programma non sa quando iniziare l\'esecuzione: sono il suo "avvio" 🚦'},
+        {type:'tip',txt:'Puoi usare "quando si clicca sulla bandiera verde" ✅, rispondere ai tasti premuti ⌨️, creare e ricevere messaggi (broadcast) e sincronizzare le azioni di diversi sprite.'},
+        {type:'video',n:8,label:'Blocchi Evento'},
+      ]},
+      {t:'🔁 Blocchi di Controllo', cards:[
+        {type:'text',h:'Controllo della logica del progetto',b:'I blocchi di controllo ti consentono di dirigere il flusso del tuo programma. Grazie a loro è possibile creare loop, condizioni, ritardi e reazioni a situazioni specifiche. Sono ciò che conferisce logica e "intelligenza" ai tuoi progetti 🔁⚙️'},
+        {type:'tip',txt:'Impara a creare loop ("sempre", "ripeti", "ripeti fino a"), usare condizioni ("se", "se… altrimenti"), interrompere script e creare progetti che rispondano a vari eventi.'},
+        {type:'video',n:9,label:'Blocchi di Controllo'},
+      ]},
+      {t:'👀 Blocchi Sensore', cards:[
+        {type:'text',h:'Risposta all\'ambiente',b:'I blocchi sensore consentono ai tuoi progetti di rispondere alle azioni degli utenti e ai cambiamenti nell\'ambiente. Grazie a loro, lo sprite può "sapere" cosa sta succedendo, ad esempio quale tasto è stato premuto, se sta toccando un altro oggetto o cosa è stato digitato dal giocatore 👀⌨️'},
+        {type:'tip',txt:'Puoi verificare tocchi con colori o oggetti, riconoscere clic e tasti, leggere risposte da "chiedi e aspetta", e usare posizione del mouse, volume o timer.'},
+        {type:'video',n:10,label:'Blocchi Sensore'},
+      ]},
+      {t:'➕ Blocchi Operatore', cards:[
+        {type:'text',h:'Logica e matematica in azione',b:'I blocchi operatori ti consentono di eseguire operazioni matematiche, confronti e operazioni logiche. Grazie a loro, i tuoi progetti possono calcolare, analizzare e prendere decisioni basate sui dati ➕➖🧮'},
+        {type:'tip',txt:'Esegui operazioni matematiche (addizione, moltiplicazione, resto…), confronta valori (>, <, =), costruisci condizioni logiche con "e", "o", "non", e combina testi con numeri casuali.'},
+        {type:'video',n:11,label:'Blocchi Operatore'},
+      ]},
+      {t:'🧠 Blocchi Variabili', cards:[
+        {type:'text',h:'Ricordare le informazioni',b:'I blocchi variabili ti consentono di salvare, archiviare e modificare i dati mentre il tuo programma è in esecuzione. Grazie alle variabili, gli sprite possono contare i punti, memorizzare le risposte dei giocatori o tenere traccia dei livelli di gioco 🧠📊'},
+        {type:'tip',txt:'Impara a creare e nominare variabili, modificarne i valori, usarle per contare e memorizzare informazioni, e nasconderle o mostrarle sullo stage.'},
+        {type:'video',n:12,label:'Blocchi Variabili'},
+      ]},
+      {t:'🧱 I Miei Blocchi', cards:[
+        {type:'text',h:'Crea le tue funzioni',b:'La categoria "I miei blocchi" ti consente di creare i tuoi set di comandi, ovvero funzioni. È un ottimo modo per organizzare il tuo codice, evitare ripetizioni e creare progetti più puliti e professionali 🧱🔁'},
+        {type:'tip',txt:'Puoi creare il tuo blocco personalizzato, aggiungere parametri (numeri, testi), organizzare il codice ed abbreviare il lavoro su progetti più grandi.'},
+        {type:'video',n:13,label:'I Miei Blocchi'},
+      ]},
+    ],
+    quiz:[
+      {q:'A cosa servono i blocchi di movimento?',opts:['Aggiungere suoni al progetto','Muovere gli sprite nello stage','Cambiare i colori dello stage','Creare animazioni di testo'],c:1,fb:'I blocchi di movimento servono per muovere, ruotare e posizionare gli sprite all\'interno dello stage.'},
+      {q:'Cosa permette di fare un blocco evento?',opts:['Calcolare operazioni matematiche','Memorizzare dati','Attivare azioni in risposta a clic, tasti o segnali','Disegnare forme geometriche'],c:2,fb:'I blocchi evento fanno partire le azioni quando si verifica qualcosa, come un clic o la pressione di un tasto.'},
+      {q:'Quali blocchi consentono di creare loop e condizioni?',opts:['Blocchi Aspetto','Blocchi Sensore','Blocchi di Controllo','Blocchi Operatore'],c:2,fb:'I blocchi di controllo gestiscono il flusso del programma con loop ("ripeti", "sempre") e condizioni ("se", "se… altrimenti").'},
+      {q:'A cosa servono le variabili in Scratch?',opts:['Aggiungere effetti visivi','Salvare e modificare dati durante l\'esecuzione','Riprodurre suoni','Cambiare lo sfondo'],c:1,fb:'Le variabili permettono di salvare informazioni come il punteggio, le risposte dei giocatori o il livello di gioco.'},
+      {q:'Cosa sono "I miei blocchi"?',opts:['Blocchi predefiniti di Scratch','Blocchi per aggiungere immagini','Funzioni personalizzate create dall\'utente','Blocchi per la musica'],c:2,fb:'"I miei blocchi" ti permettono di creare funzioni personalizzate per organizzare il codice ed evitare ripetizioni.'},
+    ]
+  },
+  {
+    id:5, emoji:'⚡', color:'#59C059',
+    title:'Codice sequenziale e in parallelo',
+    desc:'Scopri come vengono eseguiti i blocchi in Scratch e come gestire il codice in modo sequenziale o in parallelo.',
+    obj:'Comprendere l\'ordine di esecuzione dei blocchi e saper gestire il codice sia in sequenza che in parallelo.',
+    sections:[
+      {t:'📋 Esecuzione del codice', cards:[
+        {type:'text',h:'In che ordine vengono eseguiti i blocchi?',b:'Vediamo in che ordine vengono eseguiti i blocchi, e come fare a gestire il codice in modi diversi in base a quello che ci serve.'},
+        {type:'video',n:14,label:'Codice sequenziale'},
+        {type:'video',n:15,label:'Codice in parallelo'},
+      ]},
+      {t:'💡 Sequenziale vs Parallelo', cards:[
+        {type:'tip',txt:'Il codice sequenziale esegue i blocchi uno dopo l\'altro dall\'alto verso il basso. Il codice in parallelo usa più script che partono contemporaneamente, ad esempio con più blocchi "quando si clicca sulla bandiera verde".'},
+        {type:'warn',txt:'Attenzione: in Scratch ogni script parte dall\'evento in cima. Assicurati che ogni sprite abbia i blocchi evento corretti per ottenere il comportamento desiderato.'},
+      ]},
+    ],
+    quiz:[
+      {q:'Come viene eseguito il codice sequenziale in Scratch?',opts:['Dal basso verso l\'alto','Casualmente','Dall\'alto verso il basso, un blocco alla volta','Tutti i blocchi contemporaneamente'],c:2,fb:'Il codice sequenziale esegue i blocchi uno alla volta, dall\'alto verso il basso.'},
+      {q:'Come si crea codice in parallelo in Scratch?',opts:['Usando un solo script con tutti i blocchi','Usando più script con eventi separati che partono contemporaneamente','Collegando i blocchi in orizzontale','Usando solo blocchi di controllo'],c:1,fb:'Il codice in parallelo usa più script indipendenti, ognuno con il proprio blocco evento, che possono girare contemporaneamente.'},
+      {q:'Quale blocco evento è tipicamente usato per avviare il codice?',opts:['"Quando si preme un tasto"','Blocco aspetto','Blocco suono','"Quando si clicca sulla bandiera verde"'],c:3,fb:'La bandiera verde è il modo più comune per avviare l\'esecuzione di uno script in Scratch.'},
+    ]
+  },
+  {
+    id:6, emoji:'🎭', color:'#FF8C1A',
+    title:'Sprite, Sfondi e Animazioni',
+    desc:'Impara ad aggiungere e creare sprite e sfondi, e a creare animazioni combinando costumi e blocchi.',
+    obj:'Saper aggiungere, disegnare e animare sprite e sfondi in Scratch.',
+    sections:[
+      {t:'🎭 Aggiungere Sprite e Sfondi', cards:[
+        {type:'text',h:'Vari modi di aggiungere sprite',b:'Ci sono vari modi di aggiungere sprite, ed è possibile anche disegnarli grazie all\'editor integrato di Scratch.'},
+        {type:'video',n:16,label:'Sprite e Sfondi'},
+        {type:'tip',txt:'Puoi aggiungere sprite dalla libreria, caricarli dal computer, disegnarli nell\'editor integrato o usare la fotocamera!'},
+      ]},
+      {t:'🎬 Creare Animazioni', cards:[
+        {type:'text',h:'Animazioni con sprite, costumi e blocchi',b:'Con gli sprite, i costumi e i blocchi possiamo creare animazioni! Cambiando rapidamente il costume di uno sprite si crea l\'effetto animazione.'},
+        {type:'video',n:17,label:'Creare Animazioni'},
+        {type:'tip',txt:'Per animare uno sprite usa il blocco "passa al costume successivo" all\'interno di un loop "sempre" con un piccolo "attendi" tra un cambio e l\'altro.'},
+      ]},
+    ],
+    quiz:[
+      {q:'In quanti modi si può aggiungere uno sprite in Scratch?',opts:['Solo dalla libreria','Solo disegnandolo','In vari modi: libreria, upload, disegno, fotocamera','Solo caricando un\'immagine'],c:2,fb:'Scratch offre diverse modalità: libreria predefinita, caricamento da file, disegno nell\'editor e fotocamera.'},
+      {q:'Come si crea un\'animazione in Scratch?',opts:['Aggiungendo molti sprite diversi','Cambiando rapidamente i costumi di uno sprite con i blocchi','Importando un file GIF','Usando solo blocchi di movimento'],c:1,fb:'L\'animazione in Scratch si crea cambiando il costume dello sprite in rapida successione, tipicamente in un loop.'},
+      {q:'Quale blocco è utile per creare un\'animazione ciclica?',opts:['"Ferma tutto"','"Vai a x:0 y:0"','"Passa al costume successivo" in un loop "sempre"','Blocco di evento'],c:2,fb:'Combinando "passa al costume successivo" con un loop "sempre" (e un piccolo attendi) si crea un\'animazione continua.'},
+    ]
+  },
+  {
+    id:7, emoji:'🧳', color:'#5CB1D6',
+    title:'Valigetta',
+    desc:'Scopri come usare la valigetta di Scratch per salvare e riutilizzare codice e altri elementi tra i tuoi progetti.',
+    obj:'Saper usare la valigetta per risparmiare tempo e riutilizzare elementi tra diversi progetti Scratch.',
+    sections:[
+      {t:'🧳 Cos\'è la Valigetta?', cards:[
+        {type:'text',h:'Salva e riutilizza il tuo codice',b:'Un ottimo modo per salvare e riutilizzare il codice e altri elementi dei progetti. La valigetta (backpack) è una funzione di Scratch che ti permette di trasferire sprite, costumi, suoni e script da un progetto all\'altro.'},
+        {type:'video',n:18,label:'La Valigetta di Scratch'},
+        {type:'tip',txt:'Trascina semplicemente uno sprite, un costume, un suono o uno script nella valigetta per salvarlo. Poi aprila in un altro progetto e trascina gli elementi dove vuoi!'},
+      ]},
+    ],
+    quiz:[
+      {q:'A cosa serve la valigetta (backpack) in Scratch?',opts:['Scaricare Scratch sul computer','Salvare e riutilizzare sprite, suoni, costumi e script tra progetti','Condividere progetti con la community','Aggiungere estensioni a Scratch'],c:1,fb:'La valigetta permette di salvare elementi (sprite, suoni, script) e riutilizzarli in altri progetti.'},
+      {q:'Come si aggiunge un elemento alla valigetta?',opts:['Cliccando sul menu File','Trascinandolo nella valigetta','Usando la combinazione tasti CTRL+S','Esportandolo come file ZIP'],c:1,fb:'Si trascina semplicemente l\'elemento (sprite, script, ecc.) nella valigetta nella parte bassa dell\'editor.'},
+      {q:'Quale vantaggio offre la valigetta ai tutor?',opts:['Permette di programmare offline','Consente di risparmiare tempo riutilizzando elementi già creati','Aumenta la velocità di Scratch','Consente di pubblicare progetti'],c:1,fb:'La valigetta fa risparmiare tempo perché non bisogna ricreare ogni volta gli stessi elementi da zero.'},
+    ]
+  },
+  {
+    id:8, emoji:'🔌', color:'#FF6680',
+    title:'Estensioni',
+    desc:'Scopri come aggiungere nuovi blocchi a Scratch tramite le estensioni, inclusa Penna e Webcam.',
+    obj:'Conoscere le estensioni di Scratch e saper utilizzare quelle più comuni come Penna e Webcam.',
+    sections:[
+      {t:'🔌 Cosa sono le Estensioni?', cards:[
+        {type:'text',h:'Nuovi blocchi grazie alle estensioni',b:'Grazie alle estensioni possiamo aggiungere nuovi blocchi a Scratch! Le estensioni espandono le funzionalità di Scratch con blocchi speciali per musica, testo vocale, video, penna e molto altro.'},
+        {type:'video',n:19,label:'Estensioni di Scratch'},
+      ]},
+      {t:'✏️ Estensione Penna', cards:[
+        {type:'text',h:'Disegna con la Penna',b:'L\'estensione Penna aggiunge blocchi speciali per disegnare sullo stage. Gli sprite diventano "pennelli" che lasciano tracce colorate mentre si muovono.'},
+        {type:'video',n:20,label:'Estensione Penna'},
+        {type:'tip',txt:'Con la Penna puoi creare disegni geometrici, spirografi, mandala e molto altro combinandola con i blocchi di movimento e i loop!'},
+      ]},
+      {t:'📷 Estensione Webcam (Rilevamento Video)', cards:[
+        {type:'text',h:'Interagisci con la webcam',b:'L\'estensione Rilevamento Video ti permette di usare la webcam per interagire con i progetti Scratch. I movimenti davanti alla fotocamera possono controllare gli sprite!'},
+        {type:'video',n:21,label:'Estensione Webcam (Rilevamento Video)'},
+        {type:'warn',txt:'Per usare la webcam nelle lezioni, assicurati che il computer dello studente abbia una fotocamera funzionante e che il browser abbia i permessi di accesso.'},
+      ]},
+    ],
+    quiz:[
+      {q:'Come si aggiungono le estensioni in Scratch?',opts:['Scaricandole dal sito Scratch','Cliccando sul pulsante di aggiunta estensioni nell\'editor','Inviando una email a Scratch','Acquistandole sul sito'],c:1,fb:'Le estensioni si aggiungono cliccando sull\'icona apposita in fondo alla lista dei blocchi nell\'editor di Scratch.'},
+      {q:'Cosa permette di fare l\'estensione Penna?',opts:['Registrare la voce','Creare musica','Disegnare sullo stage mentre lo sprite si muove','Usare la webcam'],c:2,fb:'L\'estensione Penna trasforma lo sprite in un pennello che lascia tracce colorate sullo stage.'},
+      {q:'Quale estensione usa la fotocamera del computer?',opts:['Musica','Text to speech','Penna','Rilevamento Video (Webcam)'],c:3,fb:'L\'estensione Rilevamento Video usa la webcam per rilevare i movimenti e interagire con i progetti Scratch.'},
+      {q:'Quale combinazione crea disegni geometrici complessi in Scratch?',opts:['Blocchi Suono + Variabili','Estensione Penna + blocchi Movimento + loop','Blocchi Evento + Sensore','Estensione Musica + blocchi Aspetto'],c:1,fb:'Combinando l\'estensione Penna con i blocchi di movimento e i loop si possono creare spirografi, frattali e figure geometriche.'},
+    ]
+  },
+];
+
+// ─── STATE ────────────────────────────────────────────────────────────────
+let currentModule = null;
+let quizData = [], qi = 0, score = 0;
+const TOTAL = MODS.length;
+
+// ─── HOME ─────────────────────────────────────────────────────────────────
+function renderHome(){
+  const passed = MODS.filter(m=>isPassed(m.id)).length;
+  document.getElementById('pnum').textContent = passed+'/'+TOTAL;
+  document.getElementById('pfill').style.width = (passed/TOTAL*100)+'%';
+
+  const grid = document.getElementById('mgrid');
+  grid.innerHTML = '';
+  MODS.forEach((m,i)=>{
+    const done = isPassed(m.id);
+    const locked = i>0 && !isPassed(MODS[i-1].id);
+    const div = document.createElement('div');
+    div.className = 'mc'+(done?' done':'')+(locked?' locked':'');
+    div.onclick = locked ? null : ()=>openModule(m);
+    const badgeClass = done?'badge bd':locked?'badge bl':'badge bs';
+    const badgeTxt = done?'✓ Superato':locked?'🔒 Bloccato':'Inizia →';
+    div.innerHTML = `
+      <div class="mc-stripe" style="background:${m.color}"></div>
+      <div class="mc-body">
+        <div class="mc-top">
+          <span class="mc-num">Modulo ${m.id}</span>
+          <span class="mc-em">${m.emoji}</span>
+        </div>
+        <div class="mc-title">${m.title}</div>
+        <div class="mc-desc">${m.desc}</div>
+        <div class="mc-foot">
+          <span class="${badgeClass}">${badgeTxt}</span>
+          ${done?`<span class="stag">Punteggio: <b>${getScore(m.id)}%</b></span>`:''}
+        </div>
+      </div>`;
+    grid.appendChild(div);
+  });
+}
+
+// ─── MODULE CONTENT ───────────────────────────────────────────────────────
+function openModule(m){
+  currentModule = m;
+  let html = `<div class="meyebrow">Modulo ${m.id} di ${TOTAL}</div><div class="mh1">${m.emoji} ${m.title}</div><div class="mobj" style="border-left-color:${m.color}"><strong>Obiettivo:</strong> ${m.obj}</div>`;
+  m.sections.forEach(s=>{
+    html += `<div class="sch">${s.t}</div>`;
+    s.cards.forEach(c=>{ html += rc(c); });
+  });
+  const lbl = isPassed(m.id)?'🔄 Ripeti il Quiz':'📝 Avvia il Quiz →';
+  html += `<hr class="divider"><button class="ctabtn" onclick="startQuiz(${m.id})">${lbl}</button>`;
+  document.getElementById('cbody').innerHTML = html;
+  showScreen('screen-content');
+  window.scrollTo(0,0);
+}
+
+function rc(c){
+  if(c.type==='text') return `<div class="card"><h4>${c.h}</h4><p>${c.b}</p></div>`;
+  if(c.type==='hi') return `<div class="card hi"><h4>${c.h}</h4><p>${c.b}</p></div>`;
+  if(c.type==='warn') return `<div class="callout cw"><span class="ci">⚠️</span><span>${c.txt}</span></div>`;
+  if(c.type==='tip') return `<div class="callout ct"><span class="ci">💡</span><span>${c.txt}</span></div>`;
+  if(c.type==='good') return `<div class="callout cg"><span class="ci">✅</span><span>${c.txt}</span></div>`;
+  if(c.type==='upload-note') return `<div class="upload-note"><span>ℹ️</span><span>${c.txt}</span></div>`;
+  if(c.type==='video'){
+    // Videos are uploaded as video_N.mp4
+    const src = `video_${c.n}.mp4`;
+    return `<div class="video-wrap">
+      <video controls preload="metadata" playsinline>
+        <source src="${src}" type="video/mp4">
+        <p style="padding:20px;color:#fff;font-size:14px">Il tuo browser non supporta la riproduzione video. <a href="${src}" style="color:var(--lime)">Scarica il video</a>.</p>
+      </video>
+      <div class="video-label">🎬 ${c.label||'Video lezione '+c.n}</div>
+    </div>`;
+  }
+  return '';
+}
+
+// ─── QUIZ ─────────────────────────────────────────────────────────────────
+function startQuiz(id){
+  currentModule = MODS.find(x=>x.id===id);
+  quizData = [...currentModule.quiz].sort(()=>Math.random()-.5);
+  qi = 0; score = 0;
+  renderQ(); showScreen('screen-quiz');
+}
+function renderQ(){
+  const q = quizData[qi];
+  document.getElementById('qfill').style.width = (qi/quizData.length*100)+'%';
+  document.getElementById('qcount').textContent = `Domanda ${qi+1} di ${quizData.length}`;
+  document.getElementById('qtext').textContent = q.q;
+  const el = document.getElementById('qopts'); el.innerHTML='';
+  q.opts.forEach((o,idx)=>{
+    const b = document.createElement('button');
+    b.className='qopt'; b.textContent=o;
+    b.onclick=()=>answerQ(idx);
+    el.appendChild(b);
+  });
+  document.getElementById('qfb').className='qfb';
+  document.getElementById('qnxt').className='qnxt';
+}
+function answerQ(idx){
+  const q = quizData[qi]; const ok = idx===q.c;
+  if(ok) score++;
+  document.querySelectorAll('.qopt').forEach((b,i)=>{
+    b.classList.add('answered');
+    if(i===q.c) b.classList.add('correct');
+    else if(i===idx&&!ok) b.classList.add('wrong');
+  });
+  const fb = document.getElementById('qfb');
+  fb.className='qfb show '+(ok?'ok':'bad');
+  fb.innerHTML=(ok?'✓ Corretto! ':'✗ Sbagliato — ')+q.fb;
+  const nx = document.getElementById('qnxt');
+  nx.className='qnxt show';
+  nx.textContent = qi===quizData.length-1?'Vedi Risultati':'Avanti →';
+}
+function nextQ(){
+  qi++;
+  if(qi<quizData.length){ renderQ(); return; }
+  const pct = Math.round(score/quizData.length*100);
+  const passed = pct>=70;
+  setResult(currentModule.id, pct, passed);
+  showResults(pct, passed);
+}
+
+// ─── RESULTS ──────────────────────────────────────────────────────────────
+function showResults(pct, passed){
+  const m = currentModule;
+  const nextM = MODS.find(x=>x.id===m.id+1);
+  let acts = '';
+  acts += `<button class="bdark" onclick="goHome()">← Torna ai Moduli</button>`;
+  acts += `<button class="bline" onclick="startQuiz(${m.id})">🔄 Ripeti il Quiz</button>`;
+  if(passed && nextM) acts += `<button class="bline" onclick="openModule(MODS.find(x=>x.id===${nextM.id}))">Modulo ${nextM.id} →</button>`;
+  document.getElementById('rbody').innerHTML = `
+    <div class="remi">${passed?'🎉':'😅'}</div>
+    <div class="rtitle">${passed?'Superato!':'Riprova!'}</div>
+    <div class="rpct ${passed?'pass':'fail'}">${pct}%</div>
+    <div class="rsub">${score}/${quizData.length} risposte corrette.${passed?' Il prossimo modulo è sbloccato 🎉':' Servono almeno 70% per sbloccare il modulo successivo.'}</div>
+    ${acts}`;
+  showScreen('screen-results');
+  window.scrollTo(0,0);
+  setTimeout(renderHome, 100);
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────────────────────
+function exitQuiz(){ if(currentModule) openModule(currentModule); }
+function goHome(){ renderHome(); showScreen('screen-home'); window.scrollTo(0,0); }
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ─── DEV MODE (Shift+D three times) ──────────────────────────────────────
+let devKeySeq = [];
+let devMode = false;
+document.addEventListener('keydown', function(e){
+  if(e.key === 'D' && e.shiftKey){
+    devKeySeq.push(Date.now());
+    if(devKeySeq.length > 3) devKeySeq.shift();
+    if(devKeySeq.length === 3 && (devKeySeq[2] - devKeySeq[0]) < 2000){
+      devKeySeq = [];
+      devMode = !devMode;
+      if(devMode){
+        MODS.forEach(m => {
+          localStorage.setItem('scratch-passed-'+m.id,'1');
+          localStorage.setItem('scratch-score-'+m.id,'100');
+        });
+        showDevToast('🛠️ Dev Mode ON — all modules unlocked');
+      } else {
+        MODS.forEach(m => {
+          localStorage.removeItem('scratch-passed-'+m.id);
+          localStorage.removeItem('scratch-score-'+m.id);
+        });
+        showDevToast('🔒 Dev Mode OFF — progress cleared');
+      }
+      renderHome();
+    }
+  } else {
+    devKeySeq = [];
+  }
+});
+function showDevToast(msg){
+  const ex = document.getElementById('dev-toast');
+  if(ex) ex.remove();
+  const t = document.createElement('div');
+  t.id = 'dev-toast';
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#111;color:#C4F046;font-family:Nunito,sans-serif;font-weight:900;font-size:14px;padding:12px 24px;border-radius:999px;z-index:9999;border:2px solid #AEDD2E;box-shadow:0 4px 20px rgba(0,0,0,.4);pointer-events:none;white-space:nowrap;';
+  document.body.appendChild(t);
+  setTimeout(()=>{ t.style.transition='opacity .4s'; t.style.opacity='0'; setTimeout(()=>t.remove(),400); }, 2500);
+}
+
+// ─── INIT ────────────────────────────────────────────────────────────────
+renderHome();
+showScreen('screen-home');
+</script>
+
+<footer style="text-align:center;padding:20px 24px;font-size:11px;color:var(--text2);border-top:1px solid var(--border);margin-top:auto;line-height:1.7;opacity:0.7;">
+  © 2026 Kodland. Designed and developed by Ayberk Temizci for internal tutor training purposes.<br>
+  This material is the exclusive property of Kodland. Unauthorized duplication, distribution, or use outside of Kodland's internal training program is strictly prohibited.
+</footer>
+</body>
+</html>
+<!-- App created by Ayberk Toygar Temizci for Kodland — Scratch IT edition -->
