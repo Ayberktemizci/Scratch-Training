@@ -681,6 +681,7 @@ function renderQ(){
   document.getElementById('qnxt').className='qnxt';
 }
 function answerQ(idx){
+  if(document.querySelector('.qopt.answered')) return; // ← BUG FIX: prevent multiple answers
   const q = quizData[qi]; const ok = idx===q.c;
   if(ok) score++;
   document.querySelectorAll('.qopt').forEach((b,i)=>{

@@ -638,7 +638,6 @@ function rc(c){
   if(c.type==='upload-note') return `<div class="upload-note"><span>ℹ️</span><span>${c.txt}</span></div>`;
   if(c.type==='link') return `<a class="link-card" href="${c.url}" target="_blank" rel="noopener"><span class="link-card-icon">🔗</span><span class="link-card-body"><span class="link-card-title">${c.label}</span><span class="link-card-sub">${c.sub||''}</span></span><span class="link-card-arrow">↗</span></a>`;
   if(c.type==='video'){
-    // Videos are uploaded as video_N.mp4
     const src = `video_${c.n}.mp4`;
     return `<div class="video-wrap">
       <video controls preload="metadata" playsinline
@@ -675,6 +674,7 @@ function renderQ(){
   document.getElementById('qnxt').className='qnxt';
 }
 function answerQ(idx){
+  if(document.querySelector('.qopt.answered')) return; // ← BUG FIX: prevent multiple answers
   const q = quizData[qi]; const ok = idx===q.c;
   if(ok) score++;
   document.querySelectorAll('.qopt').forEach((b,i)=>{
